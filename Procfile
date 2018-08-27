@@ -1,0 +1,1 @@
+web: gunicorn sof_taxi_server.wsgi
