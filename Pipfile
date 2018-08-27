@@ -10,6 +10,7 @@ django = "==2.0.7"
 django-rest-framework = "*"
 django-heroku = "*"
 gunicorn = "*"
+googlemaps = "*"
 
 [requires]
 python_version = "3.5"
