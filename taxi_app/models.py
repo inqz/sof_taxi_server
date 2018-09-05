@@ -4,14 +4,13 @@ from django.utils import timezone
 
 
 class Client(AbstractBaseUser):
-    USERNAME_FIELD = 'login'
-    login = models.CharField(max_length=20, unique=True, verbose_name="Логін")
+    USERNAME_FIELD = 'phone_number'
     surname = models.CharField(max_length=50, verbose_name="Прізвище")
     name = models.CharField(max_length=50, verbose_name="Ім'я")
     phone_number = models.CharField(max_length=20, verbose_name="Номер мобільного")
 
     def __str__(self):
-        return self.login
+        return "Клиент №"+str(self.pk)+" "+self.surname+" "+self.name
 
     class Meta:
         verbose_name_plural = "Клієнти"
