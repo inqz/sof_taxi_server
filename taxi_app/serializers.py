@@ -5,7 +5,7 @@ from .models import *
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = 'id', 'login', 'name', 'surname', 'phone_number'
+        fields = 'id', 'name', 'surname', 'phone_number'
 
 
 class DriverSerializer(serializers.ModelSerializer):

@@ -21,7 +21,7 @@ def client_index(request):
 def client_registration(request):
     try:
         client = Client.objects.create(
-            login=request.data["login"],
+            phone_number=request.data["phone_number"],
             password=request.data["password"],
             surname=request.data["surname"],
             name=request.data["name"]
@@ -43,7 +43,7 @@ def client_authorization(request):
     try:
         client = get_object_or_404(
             Client,
-            login=request.data["login"],
+            phone_number=request.data["phone_number"],
             password=request.data["password"],
         )
         return Response({
