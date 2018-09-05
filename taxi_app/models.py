@@ -16,6 +16,7 @@ class Client(AbstractBaseUser):
         verbose_name_plural = "Клієнти"
         verbose_name = "клієнт"
 
+
 DRIVER_STATUS = (
     (0, "Недоступний"),
     (1, "Вільний"),
@@ -100,7 +101,7 @@ class Order(models.Model):
     planed_time = models.TimeField(verbose_name="Час замовлення", default=timezone.now)
 
     def __str__(self):
-        return self.client.login+" ("+self.address_from+" -> "+self.address_to+")"
+        return self.client.surname+" "+self.client.name+" ("+self.address_from+" -> "+self.address_to+")"
 
     class Meta:
         verbose_name_plural = "Замовлення"
@@ -136,6 +137,7 @@ class DriverResponsesBook(models.Model):
 
     def __str__(self):
         return "Responses about "+self.driver.surname+" "+self.driver.name
+
 
 RESPONSE_TYPES = (
     (True, "Позитивний"),

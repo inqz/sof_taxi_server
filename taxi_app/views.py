@@ -70,6 +70,8 @@ def client_create_new_order(request):
             payment_type=request.data["payment_type"],
             distance=request.data["distance"],
             price=request.data["price"],
+            planed_date=request.data["planed_date"],
+            planed_time=request.data["planed_time"]
         )
         return Response({
             "status": True,
@@ -144,7 +146,7 @@ def client_send_new_response_about_driver(request):
         order = get_object_or_404(Order, pk=request.data["order_id"])
         book = DriverResponsesBook.objects.get_or_create(driver=order.driver, client=order.client)
         book.responses.add(
-            Response.objects.create(
+            ClientResponse.objects.create(
                 text=request.data["text"],
                 response_type=request.data["response_type"]
             )
@@ -257,7 +259,6 @@ def driver_change_status(request):
     return Response(response)
 
 
-# Need to test
 @api_view(["POST"])
 @parser_classes((JSONParser,))
 def driver_requests_orders(request):
