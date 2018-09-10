@@ -186,7 +186,7 @@ class Settings(models.Model):
         return default if settings.value == 0.0 else settings.value
 
     def __str__(self):
-        return self.get_settings_id_display()
+        return self.get_settings_id_display()+" - "+str(self.value)
 
     class Meta:
         verbose_name_plural = "Налаштування"

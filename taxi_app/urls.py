@@ -8,6 +8,7 @@ urlpatterns = [
     path("client/authorization/", views.client_authorization),
     path("client/order/create/", views.client_create_new_order),
     path("client/order/cancel/", views.client_cancels_order),
+    path("client/order/detail/", views.get_order_detail),
     path("client/request/destinations/", views.client_requests_favourite_destinations),
     path("client/request/driver/position/", views.client_requests_driver_position),
     path("client/driver/like/", views.client_send_like_to_driver),
@@ -21,4 +22,5 @@ urlpatterns = [
     path("driver/order/ride/", views.driver_start_ride),
     path("driver/order/finish/", views.driver_finish_order),
     path("driver/order/cancel/", views.driver_cancel_order),
+    path("driver/order/detail/", views.get_order_detail),
 ]

@@ -265,6 +265,10 @@ def driver_requests_orders(request):
     try:
         import datetime
         driver = get_object_or_404(Driver, pk=request.data["driver_id"])
+        try:
+            rejected_orders = DriverRejectedOrders.objects.get(driver=driver).orders
+        except DriverRejectedOrders.DoesNotExist:
+            rejected_orders = []
         driver.driver_lat = request.data["lat"]
         driver.driver_lng = request.data["lng"]
         driver.save()
@@ -276,7 +280,7 @@ def driver_requests_orders(request):
         ))
         for order in orders:
             dist = distance((driver.driver_lat, driver.driver_lng), latlng(order.address_from))
-            if dist <= driver.radius_of_order_accepting:
+            if dist <= driver.radius_of_order_accepting and not rejected_orders.filter(pk=order.pk).exists():
                 orders_request.append({
                     "order": OrderSerializer(order, many=False).data,
                     "distance": dist
@@ -357,6 +361,7 @@ def driver_cancel_order(request):
     try:
         driver = get_object_or_404(Driver, pk=request.data["driver_id"])
         order = get_object_or_404(Order, pk=request.data["order_id"])
+        DriverRejectedOrders.add_new_rejected_order(driver=driver, order=order)
         if order.driver is driver:
             order.driver = None
             order.order_status = "new"
@@ -373,6 +378,22 @@ def driver_cancel_order(request):
 def driver_confirm_cash_payment(request):
     try:
         pass
+    except (KeyError, Http404) as e:
+        return Response({
+            "status": False,
+            "error": str(e)
+        })
+
+
+@api_view(["POST"])
+@parser_classes((JSONParser,))
+def get_order_detail(request):
+    try:
+        order = get_object_or_404(Order, pk=request.data["order_id"])
+        return Response({
+            "status": True,
+            "order": OrderSerializer(order, many=False).data
+        })
     except (KeyError, Http404) as e:
         return Response({
             "status": False,
