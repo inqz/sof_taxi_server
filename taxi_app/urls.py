@@ -1,4 +1,6 @@
 from django.urls import path
+from rest_framework_swagger.views import get_swagger_view
+
 from . import views
 
 app_name = "taxi_app"
@@ -23,4 +25,8 @@ urlpatterns = [
     path("driver/order/finish/", views.driver_finish_order),
     path("driver/order/cancel/", views.driver_cancel_order),
     path("driver/order/detail/", views.get_order_detail),
+]
+
+urlpatterns += [
+    path('doc/', get_swagger_view(title='API doc'))
 ]
