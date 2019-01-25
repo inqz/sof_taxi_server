@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_swagger.views import get_swagger_view
 
-from . import views
+from taxi_app import views
 
 app_name = "taxi_app"
 

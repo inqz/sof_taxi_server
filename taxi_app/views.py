@@ -6,10 +6,11 @@ from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 
-from taxi_app.models import *
+from taxi_app.models import Client, Order, Driver, DriverResponsesBook, DriverRejectedOrders, ClientResponse
 from taxi_app.serializers import ClientSerializer, OrderSerializer, DriverSerializer
 
-import requests, math
+import math
+import requests
 
 
 def client_index(request):
@@ -266,7 +267,7 @@ def driver_requests_orders(request):
         import datetime
         driver = get_object_or_404(Driver, pk=request.data["driver_id"])
         try:
-            rejected_orders = DriverRejectedOrders.objects.get(driver=driver).orders
+            rejected_orders = DriverRejectedOrders.objects.get(driver=driver).orders.values_list('id', flat=True)
         except DriverRejectedOrders.DoesNotExist:
             rejected_orders = []
         driver.driver_lat = request.data["lat"]
@@ -280,7 +281,7 @@ def driver_requests_orders(request):
         ))
         for order in orders:
             dist = distance((driver.driver_lat, driver.driver_lng), latlng(order.address_from))
-            if dist <= driver.radius_of_order_accepting and not rejected_orders.filter(pk=order.pk).exists():
+            if dist <= driver.radius_of_order_accepting and order.pk not in rejected_orders:
                 orders_request.append({
                     "order": OrderSerializer(order, many=False).data,
                     "distance": dist
